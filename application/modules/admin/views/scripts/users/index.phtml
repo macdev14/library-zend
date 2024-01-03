@@ -1,0 +1,31 @@
+<br /><br />
+        <?php
+        echo '<div class="row">';
+        foreach ($this->paginator as $book) {
+            echo '<div class="col-md-4">';
+            echo '<div class="card mb-3">';
+           
+            echo '<div class="card-body">';
+           
+			echo '<h5 class="card-title">' .$book['username'] . '</h5>';
+            // echo '<div class="btn-group" role="group" aria-label="Book Actions">';
+            
+            echo '<form style="margin-right:10px" action="' . $this->url(['controller'=>'users','module'=>'admin','action'=>'delete','id'=>$book['id']]) . '" class="inline"> <button type="submit" class="btn btn-danger submit">Excluir</button></form>';
+            // echo '<form action="' . $this->url(['controller'=>'users','module'=>'admin','action'=>'edit','id'=>$book['id']]) . '" class="inline"> <button type="submit" class="btn btn-primary submit">Edit</button></form>';
+            // echo '</div>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+        }
+        echo '</div>';
+
+
+        $pageCount = ceil($this->paginator->count() / $this->paginator->getItemCountPerPage());
+    
+    if($pageCount > 0){
+        echo $this->paginationControl($this->paginator,'Sliding', 'pagination.phtml');
+    }else{
+        echo '<h2>Não há usuarios cadastradas</h2>';
+    }
+        ?>
+

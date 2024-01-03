@@ -1,0 +1,34 @@
+<br /><br />
+<?php
+  echo '<form action="' . $this->url(['controller'=>'book','module'=>'admin','action'=>'add']) . '" class="inline"> <button type="submit" class="btn btn-success submit">Adicionar</button></form>';
+?>
+<br /><br />
+	<?php
+
+echo '<div class="row">';
+foreach ($this->paginator as $book) {
+    
+    echo '<div class="col-md-4">';
+    echo '<div class="card mb-3">';
+    echo '<img src="' . $book['Link'] . '" class="card-img-top" alt="Book Image">';
+    echo '<div class="card-body">';
+    echo '<h5 class="card-title">' . $book['Title'] . '</h5>';
+    echo '<p class="card-text"><b>Author:</b> ' . $book['author_name'] . '</p>';
+    // echo '<div class="btn-group" role="group" aria-label="Book Actions">';
+    echo '<form style="margin-right:10px" action="' . $this->url(['controller'=>'book','module'=>'admin','action'=>'delete','id'=>$book['ID']]) . '" class="inline"> <button type="submit" class="btn btn-danger submit">Delete</button></form>';
+    echo '<form action="' . $this->url(['controller'=>'book','module'=>'admin','action'=>'edit','id'=>$book['ID']]) . '" class="inline"> <button type="submit" class="btn btn-primary submit">Edit</button></form>';
+    echo '<form method="post" action="' . $this->url(['controller'=>'reservation','module'=>'admin','action'=>'create']) . '" class="inline"><input type="hidden" value="'.$book['ID'].'"/> <button type="submit" class="btn btn-primary submit">Reservar</button></form>';
+    // echo '</div>';
+    echo '</div>';
+    echo '</div>';
+    echo '</div>';
+}
+echo '</div>';
+$pageCount = ceil($this->paginator->count() / $this->paginator->getItemCountPerPage());
+    
+if($pageCount > 0){
+    echo $this->paginationControl($this->paginator,'Sliding', 'pagination.phtml');
+}else{
+    echo '<h2>Não há livros cadastrados</h2>';
+}
+	?>

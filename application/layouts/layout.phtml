@@ -1,0 +1,19 @@
+<?php echo $this->doctype(); ?>
+<html lang="en">
+    <head>
+   <?php  echo $this->render('_header.phtml') ?>
+    </head>
+
+    <body>
+        <header>
+         <?php echo $this->render('_navbar.phtml') ?>
+        </header>
+        <main>
+            <!-- <?php echo $this->navigation() ?> -->
+        <div class="container mt-2">
+        <?php echo $this->layout()->content; ?>
+        </div>
+        </main>
+       <?php echo $this->render('_footer.phtml') ?>
+    </body>
+</html>

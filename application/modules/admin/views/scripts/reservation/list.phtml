@@ -1,0 +1,31 @@
+<br /><br />
+        <?php
+        echo '<div class="row">';
+        foreach ($this->paginator as $book) {
+            echo '<div class="col-md-4">';
+            echo '<div class="card mb-3">';
+            echo '<img src="' . $book['book_link'] . '" class="card-img-top" alt="Book Image">';
+            echo '<div class="card-body">';
+            echo '<h5 class="card-title">' . $book['book_title'] . '</h5>';
+			echo '<h5 class="card-title">Reservado por ' . $book['username'] . '</h5>';
+            // echo '<div class="btn-group" role="group" aria-label="Book Actions">';
+            echo '<form style="margin:10px" method="post" action="' . $this->url(['controller'=>'reservation','module'=>'admin','action'=>'delete', 'id'=>$book['reservation_id'] ]) . '" class="inline"><input type="hidden" name="book_id" value="'.$book['book_id'].'"/> <button type="submit" class="btn btn-primary submit">Cancelar Reserva</button></form>';
+            // echo '<form style="margin:10px" action="' . $this->url(['controller'=>'reservation','module'=>'admin','action'=>'delete','id'=>$book['reservation_id']]) . '" class="inline"> <button type="submit" class="btn btn-danger submit">Delete</button></form>';
+            echo '<form style="margin:10px" action="' . $this->url(['controller'=>'reservation','module'=>'admin','action'=>'edit','id'=>$book['reservation_id']]) . '" class="inline"> <button type="submit" class="btn btn-warning submit">Alterar</button></form>';
+            // echo '</div>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+        }
+        echo '</div>';
+
+
+        $pageCount = ceil($this->paginator->count() / $this->paginator->getItemCountPerPage());
+    
+    if($pageCount > 0){
+        echo $this->paginationControl($this->paginator,'Sliding', 'pagination.phtml');
+    }else{
+        echo '<h2>Não há reservas cadastradas</h2>';
+    }
+        ?>
+

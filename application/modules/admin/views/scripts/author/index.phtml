@@ -1,0 +1,30 @@
+
+<br /><br />
+<?php
+  echo '<form action="' . $this->url(['controller'=>'author','module'=>'admin','action'=>'add']) . '" class="inline"> <button type="submit" class="btn btn-success submit">Adicionar</button></form>';
+?>
+<br /><br />
+        <?php
+
+        echo '<div class="row">';
+        foreach ($this->paginator as $book) {
+            echo '<div class="col-md-2">';
+            echo '<div class="card mb-3">';
+            echo '<img src="' . $book['link'] . '" class="card-img-top" alt="Book Image">';
+            echo '<div class="card-body">';
+            echo '<h5 class="card-title">' . $book['nome'] . '</h5>';
+
+            // echo '<div class="btn-group" role="group" aria-label="Book Actions">';
+            echo '<button type="button" style="margin-right:10px" class="btn btn-danger">Delete</button>';
+            echo '<form action="' . $this->url(['controller'=>'author','module'=>'admin','action'=>'edit','id'=>$book['id']]) . '" class="inline"> <button type="submit" class="btn btn-primary submit">Edit</button></form>';
+            // echo '</div>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+        }
+        echo '</div>';
+
+
+        echo $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml');
+        ?>
+ 

@@ -1,0 +1,52 @@
+
+<br /><br />
+<?php
+$autenticado = Zend_Auth::getInstance()->getIdentity();
+echo $autenticado ? '<form action="' . $this->url(['controller'=>'book','module'=>'admin','action'=>'add']) . '" class="inline"> <button type="submit" class="btn btn-success submit">Adicionar</button></form>': '';
+?>
+<br /><br />
+	<?php
+    $autenticado = Zend_Auth::getInstance()->getIdentity();
+    $ehAdmin =  Zend_Registry::get('role') == 'admins';
+    $model = new Library_Model_DbTable_Reservation();
+    $userId = $autenticado ? $autenticado->id : null;
+    echo '<div class="row">';
+foreach ($this->paginator as $book) {
+
+    $reservado = $userId ? $model->isReservedByUser($userId, $book['ID']) : false;
+    $possuiPermissao = $userId ? $userId  == $book['user_id'] : false;
+    echo '<div class="col-md-4">';
+    echo '<div class="card mb-3">';
+    echo '<img src="' . $book['Link'] . '" class="card-img-top" alt="Book Image">';
+    echo '<div class="card-body">';
+    echo '<h5 class="card-title">' . $book['Title'] . '</h5>';
+    echo '<p class="card-text"><b>Autor:</b> ' . $book['author_name'] . '</p>';
+    echo '<p class="card-text"><b>Cadastrado por:</b> ' . $book['username'] . '</p>';
+    // echo '<div class="btn-group" role="group" aria-label="Book Actions">';
+    if (($possuiPermissao || $ehAdmin) && $userId){
+    echo '<form style="margin:10px" action="' . $this->url(['controller'=>'book','module'=>'admin','action'=>'delete','id'=>$book['ID']]) . '" class="inline"> <button type="submit" class="btn btn-danger submit">Excluir</button></form>';
+    echo '<form style="margin:10px" action="' . $this->url(['controller'=>'book','module'=>'admin','action'=>'edit','id'=>$book['ID']]) . '" class="inline"> <button type="submit" class="btn btn-warning submit">Alterar</button></form>';
+    }
+    if(!$reservado && $userId){
+    echo '<form style="margin:10px" method="post" action="' . $this->url(['controller'=>'reservation','module'=>'admin','action'=>'create']) . '" class="inline"><input type="hidden" name="book_id" value="'.$book['ID'].'"/> <button type="submit" class="btn btn-primary submit">Reservar</button></form>';
+    }
+    if($reservado && $userId){
+        echo '<form style="margin:10px" method="post" action="' . $this->url(['controller'=>'reservation','module'=>'admin','action'=>'delete', 'inline'=>1, 'id'=>$model->getReservationIdByBookId($book['ID'])]) . '" class="inline"><input type="hidden" name="book_id" value="'.$book['ID'].'"/> <button type="submit" class="btn btn-primary submit">Cancelar Reserva</button></form>';
+        }
+    // echo '</div>';
+    echo '</div>';
+    echo '</div>';
+    echo '</div>';
+}
+echo '</div>';
+    
+    $pageCount = ceil($this->paginator->count() / $this->paginator->getItemCountPerPage());
+    
+    if($pageCount > 0){
+        echo $this->paginationControl($this->paginator,'Sliding', 'pagination.phtml');
+    }else{
+        echo '<h2>Não há livros cadastrados</h2>';
+    }
+	
+	?>
+	

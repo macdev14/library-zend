@@ -1,0 +1,55 @@
+<nav class="navbar navbar-expand-xl navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="<?php echo $this->url(['controller'=>'books','module'=>'library','action'=>'list']) ?>">Biblioteca</a>
+        <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavId" aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavId">
+           <?php $autenticado = Zend_Auth::getInstance()->getIdentity();
+            if($autenticado){
+             echo '<ul class="navbar-nav me-auto mt-2 mt-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" href="'. $this->url(['controller'=>'book','module'=>'admin','action'=>'index']).'" aria-current="page">Meus Livros
+                        <span class="visually-hidden">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="'. $this->url(['controller'=>'reservation','module'=>'admin','action'=>'index']) .'">Minhas Reservas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="'. $this->url(['controller'=>'author','module'=>'admin','action'=>'index']).'">Autores</a>
+                </li>';
+               
+                if (Zend_Registry::get('role') == 'admins') {
+                echo '<li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownId">
+                        <a class="dropdown-item" href="'. $this->url(['controller'=>'reservation','module'=>'admin','action'=>'list']).'">Ver Reservas de Outros Usuários</a>
+                        <a class="dropdown-item" href="'. $this->url(['controller'=>'users','module'=>'admin','action'=>'index']).'">Ver Usuários Cadastrados</a>
+                    </div>
+                </li>';
+                }
+            echo '</ul>
+            <form class="d-flex my-2 my-lg-0" action="'.$this->url(['controller'=>'books','module'=>'library','action'=>'list']).'">
+                <input name="query" class="form-control me-sm-2" type="text" placeholder="Search" />
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+                    Search
+                </button>
+            </form>
+            <form action="'.$this->url(['controller'=>'authentication','module'=>'default','action'=>'logout']).'" class="d-flex my-2 my-lg-0">
+            
+                <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">
+                    Sair
+                </button>
+            </form>';
+        }
+       else{ echo '<form action="'.$this->url(['controller'=>'authentication','module'=>'default','action'=>'login']).'" class="d-flex my-2 my-lg-0">
+            
+        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">
+            Login
+        </button>
+    </form>';
+       }
+        ?>
+        </div>
+    </div>
+</nav>
